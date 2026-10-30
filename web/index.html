@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ELEVATOR ACTION: Red Door Protocol — play in your browser</title>
+  <meta name="description" content="A 2D sprite-based Elevator Action-inspired arcade game in Rust and Bevy. Ride the elevators, crack the red doors, reach the getaway car.">
+  <meta property="og:title" content="ELEVATOR ACTION: Red Door Protocol">
+  <meta property="og:description" content="Ride the elevators. Crack the red doors. Get out alive. A Rust + Bevy arcade game.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/art/banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#05070b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="assets/fonts/Arcade17.ttf" as="font" type="font/ttf" crossorigin>
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="back" href="https://orbitmechanic.github.io/">← Gallifrey Station</a>
+    <span class="bay-label">BAY 02 / RECENT LAUNCH</span>
+    <nav class="links">
+      <a href="https://github.com/orbitmechanic/elevator-action-bevy" target="_blank" rel="noopener">Source ↗</a>
+      <button id="fullscreen" type="button">Fullscreen ⤢</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="kicker"><span></span> A BEVY 0.20 ARCADE TRIBUTE</p>
+      <h1>ELEVATOR <em>ACTION</em></h1>
+      <p class="subtitle">RED DOOR PROTOCOL</p>
+      <p class="lede">Three assignments. Eight floors. Two elevators. Collect every red file, dodge the night desk's agents, and reach the getaway car.</p>
+    </section>
+
+    <section class="cabinet" aria-label="Elevator Action game">
+      <div class="frame">
+        <canvas id="game-canvas" width="960" height="720" tabindex="0" aria-label="Elevator Action game canvas"></canvas>
+
+        <div id="loading" class="veil">
+          <div class="loader"></div>
+          <p>BOOTING THE HOTEL MERIDIAN…</p>
+        </div>
+
+        <div id="start-overlay" class="veil clickable" hidden>
+          <p class="start-title">CLICK TO FOCUS</p>
+          <p class="start-note">then press <kbd>Enter</kbd> to start</p>
+          <p class="start-small">Keyboard required · sound starts after your first click</p>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="Controls">
+        <span><kbd>A</kbd><kbd>D</kbd> move</span>
+        <span><kbd>J</kbd> shoot</span>
+        <span><kbd>K</kbd> jump</span>
+        <span><kbd>S</kbd> duck</span>
+        <span><kbd>W</kbd> call / ride</span>
+        <span><kbd>P</kbd> pause</span>
+        <span><kbd>M</kbd> mute</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>Rust + Bevy 0.20.1 · original Krita art · synthesized chiptune · <a href="https://github.com/orbitmechanic/elevator-action-bevy" target="_blank" rel="noopener">source on GitHub</a></p>
+      <p class="tiny">A Gallifrey Station launch. Best on a desktop browser with a keyboard; tablets need a hardware keyboard.</p>
+    </footer>
+  </main>
+
+  <noscript><p class="noscript">This game needs JavaScript and WebGL 2.</p></noscript>
+
+  <script type="module">
+    import init from './elevator_action.js';
+
+    const canvas = document.getElementById('game-canvas');
+    const loading = document.getElementById('loading');
+    const overlay = document.getElementById('start-overlay');
+    let ready = false;
+
+    function focusGame() {
+      if (!ready) return;
+      overlay.hidden = true;
+      canvas.focus({ preventScroll: true });
+    }
+
+    overlay.addEventListener('click', focusGame);
+    canvas.addEventListener('pointerdown', () => canvas.focus({ preventScroll: true }));
+
+    document.getElementById('fullscreen').addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (_) { /* fullscreen may be blocked */ }
+    });
+
+    try {
+      await init();
+      ready = true;
+      loading.hidden = true;
+      overlay.hidden = false;
+      canvas.focus({ preventScroll: true });
+      // winit focuses the canvas when it is created; keep the station header
+      // and title in view after that first focus scroll.
+      requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+    } catch (err) {
+      console.error(err);
+      loading.innerHTML = '<p class="fail">THE ELEVATOR IS STUCK.</p><p class="start-small">WebGL 2 is required. Try a current Chrome, Firefox, Edge or Safari.</p>';
+    }
+  </script>
+</body>
+</html>

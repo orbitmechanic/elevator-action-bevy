@@ -36,6 +36,9 @@ pub fn run() {
                     title: "ELEVATOR ACTION: RED DOOR PROTOCOL".into(),
                     resolution: WindowResolution::new(960, 720),
                     resizable: false,
+                    canvas: Some("#game-canvas".into()),
+                    fit_canvas_to_parent: false,
+                    prevent_default_event_handling: true,
                     ..default()
                 }),
                 ..default()

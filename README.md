@@ -7,6 +7,8 @@ A complete 2D sprite-based arcade game in the spirit of Taito's 1983
 through an eight-floor hotel, crack open the red document doors, shoot the
 night desk's agents, and reach the getaway car before the building closes in.
 
+**[Play it in your browser →](https://orbitmechanic.github.io/elevator-action-web/)**
+
 All art, animation, music, sound effects, and the pixel font in this repository
 were generated from scratch for this project. No assets from the original
 arcade game are used.
@@ -28,6 +30,8 @@ arcade game are used.
   pistol, hit, pickup, elevator ding, death, level-clear, and game-over cues.
 - **Headless-verified** — formatting, clippy, unit tests, and integration tests
   all pass; every screenshot in this README was captured from the running game.
+- **Playable on the web** — a WebGL 2 build ships to GitHub Pages with a
+  click-to-focus shell, fullscreen button, and the same 960×720 arcade screen.
 
 ## Screenshots
 
@@ -116,6 +120,26 @@ cargo run -- --screenshot shots/stage1.png --frame 480 --demo
 shots and smoke-testing movement, elevator rides, shooting, and document
 pickup). Screenshot capture waits for the scene to settle before saving, then
 exits with success.
+
+## Browser build
+
+Live at **https://orbitmechanic.github.io/elevator-action-web/**.
+
+The web build is Bevy's WebGL 2 target, compiled to
+`wasm32-unknown-unknown` and packaged with `wasm-bindgen`:
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install wasm-bindgen-cli --version 0.2.129
+
+tools/build_web.sh
+python3 -m http.server 8123 --directory web/dist
+# open http://localhost:8123/
+```
+
+`tools/build_web.sh` stages the static shell from `web/`, the runtime assets,
+and the `.nojekyll` marker in `web/dist/`. `wasm-opt -Oz` is used when available
+(the shipped build is ~26 MB of wasm). The browser needs WebGL 2 and a keyboard.
 
 ## Project deck
 

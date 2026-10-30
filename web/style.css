@@ -1,0 +1,332 @@
+@font-face {
+  font-family: "Arcade 17";
+  src: url("assets/fonts/Arcade17.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --bg: #05070b;
+  --panel: #0b1220;
+  --ink: #eef2f8;
+  --muted: #93a1b7;
+  --dim: #5e6b80;
+  --cyan: #5ee0d5;
+  --red: #d93442;
+  --gold: #ffd463;
+  --line: #23344f;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(94, 224, 213, 0.09), transparent 42%),
+    radial-gradient(ellipse at 80% 110%, rgba(217, 52, 66, 0.10), transparent 45%),
+    var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(35, 52, 79, 0.20) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 52, 79, 0.20) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 82%);
+  opacity: 0.55;
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 22px 12px;
+  background: linear-gradient(180deg, rgba(5, 7, 11, 0.96), rgba(5, 7, 11, 0.84) 70%, transparent);
+  backdrop-filter: blur(6px);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.top a, .top button {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.top a:hover, .top button:hover { color: var(--cyan); }
+
+.back { color: var(--cyan) !important; }
+
+.bay-label {
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.top button {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 26px 0 48px;
+}
+
+.intro {
+  text-align: center;
+  margin: 8px auto 26px;
+  max-width: 900px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  color: var(--cyan);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+
+.kicker span {
+  width: 26px;
+  height: 1px;
+  background: var(--red);
+  box-shadow: 0 0 10px var(--red);
+}
+
+h1 {
+  margin: 0;
+  font-family: "Arcade 17", "IBM Plex Mono", monospace;
+  font-weight: 400;
+  font-size: clamp(28px, 5.4vw, 58px);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  color: #f4e7c6;
+  text-shadow: 4px 4px 0 #8f1724;
+}
+
+h1 em {
+  display: inline-block;
+  color: var(--red);
+  font-style: normal;
+  text-shadow: 4px 4px 0 #4a0910;
+}
+
+.subtitle {
+  margin: 12px 0 0;
+  color: var(--cyan);
+  font-family: "Arcade 17", "IBM Plex Mono", monospace;
+  font-size: clamp(10px, 1.5vw, 16px);
+  letter-spacing: 0.08em;
+}
+
+.lede {
+  margin: 16px auto 0;
+  max-width: 660px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cabinet {
+  width: 100%;
+}
+
+.frame {
+  position: relative;
+  width: min(960px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 4 / 3;
+  background: #02040a;
+  border: 3px solid var(--red);
+  outline: 1px solid #2a3c59;
+  outline-offset: 5px;
+  box-shadow:
+    0 0 0 8px rgba(5, 7, 11, 0.9),
+    0 26px 80px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(217, 52, 66, 0.12);
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #02040a;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  outline: none;
+  cursor: default;
+  touch-action: none;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(2, 4, 10, 0.88);
+  backdrop-filter: blur(2px);
+  text-align: center;
+  padding: 24px;
+}
+
+.veil[hidden] { display: none; }
+.veil.clickable { cursor: pointer; }
+
+.veil p { margin: 0; }
+
+.start-title {
+  color: var(--gold);
+  font-family: "Arcade 17", monospace;
+  font-size: clamp(20px, 3.2vw, 34px);
+  text-shadow: 3px 3px 0 #3a2508;
+}
+
+.start-note {
+  color: var(--ink);
+  font-family: "Arcade 17", monospace;
+  font-size: clamp(10px, 1.4vw, 14px);
+}
+
+.start-small {
+  color: var(--dim);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.loader {
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(94, 224, 213, 0.2);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#loading p {
+  color: var(--cyan);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.fail {
+  color: var(--red) !important;
+  font-family: "Arcade 17", monospace !important;
+  font-size: 24px !important;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 18px;
+  margin: 22px auto 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.controls span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 20px;
+  padding: 3px 5px;
+  border: 1px solid #2a3c59;
+  border-bottom-color: #101a2b;
+  border-radius: 3px;
+  background: #0d1624;
+  color: var(--ink);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-align: center;
+}
+
+footer {
+  margin: 34px auto 0;
+  max-width: 960px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+footer a { color: var(--muted); }
+footer a:hover { color: var(--cyan); }
+.tiny { margin-top: 4px; font-size: 10px; opacity: 0.8; }
+
+.noscript {
+  text-align: center;
+  color: var(--red);
+  padding: 30px;
+}
+
+@media (max-width: 720px) {
+  .top {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 16px;
+  }
+  .bay-label { order: 3; width: 100%; text-align: center; }
+  .intro { margin-top: 0; }
+  .lede { font-size: 13px; }
+  .frame { aspect-ratio: 4 / 3; }
+  .controls { font-size: 9px; gap: 7px 12px; }
+  footer { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader { animation: none; }
+  * { transition: none !important; }
+}
