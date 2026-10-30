@@ -14,6 +14,30 @@
   <meta name="twitter:image" content="https://orbitmechanic.github.io/elevator-action-web/assets/art/banner.png">
   <link rel="canonical" href="https://orbitmechanic.github.io/elevator-action-web/">
   <meta name="theme-color" content="#05070b">
+  <script>
+    // Browsers start Web Audio suspended until a real user gesture. Bevy creates
+    // its AudioContext during boot, so collect it and resume it on the first
+    // trusted pointer/key event. The game's title screen overlay is that click.
+    (() => {
+      const Native = window.AudioContext || window.webkitAudioContext;
+      if (!Native) return;
+      const contexts = [];
+      function Wrapped(...args) {
+        const ctx = new Native(...args);
+        contexts.push(ctx);
+        return ctx;
+      }
+      Wrapped.prototype = Native.prototype;
+      window.AudioContext = Wrapped;
+      if (window.webkitAudioContext) window.webkitAudioContext = Wrapped;
+      const resume = () => contexts.forEach((ctx) => {
+        if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+      });
+      ['pointerdown', 'keydown', 'touchstart'].forEach((event) => {
+        window.addEventListener(event, resume, { capture: true, passive: true });
+      });
+    })();
+  </script>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <link rel="preload" href="assets/fonts/Arcade17.ttf" as="font" type="font/ttf" crossorigin>
