@@ -62,13 +62,12 @@ pub fn update_player(
     mut run: ResMut<RunState>,
     mut elevators: ResMut<Elevators>,
     mut fx: ResMut<Fx>,
-    mut rng: ResMut<Rng>,
     mut commands: Commands,
     mut sfx: MessageWriter<PlaySfx>,
-    mut query: Query<(Entity, &mut Player, &mut Transform, &mut Sprite)>,
+    mut query: Query<(&mut Player, &mut Transform, &mut Sprite)>,
 ) {
     let dt = time.delta_secs().min(0.05);
-    let Ok((entity, mut player, mut transform, mut sprite)) = query.single_mut() else {
+    let Ok((mut player, mut transform, mut sprite)) = query.single_mut() else {
         return;
     };
 
@@ -222,7 +221,6 @@ pub fn update_player(
     {
         elevators.0[shaft].riders = elevators.0[shaft].riders.saturating_sub(1);
     }
-    let _ = (entity, &mut rng);
 }
 
 fn set_frame(sprite: &mut Sprite, index: usize, _facing: f32) {
