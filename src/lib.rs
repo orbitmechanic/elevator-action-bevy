@@ -8,6 +8,7 @@ pub mod ui;
 pub mod world;
 
 use bevy::{
+    asset::{AssetMetaCheck, AssetPlugin},
     audio::{GlobalVolume, Volume},
     camera::ScalingMode,
     image::ImagePlugin,
@@ -31,6 +32,10 @@ pub fn run() {
     app.add_plugins(
         DefaultPlugins
             .set(ImagePlugin::default_nearest())
+            .set(AssetPlugin {
+                meta_check: AssetMetaCheck::Never,
+                ..default()
+            })
             .set(WindowPlugin {
                 primary_window: Some(Window {
                     title: "ELEVATOR ACTION: RED DOOR PROTOCOL".into(),
